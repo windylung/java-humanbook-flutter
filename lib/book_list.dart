@@ -22,7 +22,6 @@ class _BookListState extends State<BookList> {
     final response =
     await http.get(Uri.parse('http://localhost:8080/book/list'));
 
-    print(response);
     if (response.statusCode == 200) {
       List<dynamic> booksJson = jsonDecode(response.body);
       return booksJson.map((json) => Book.fromJson(json)).toList();
