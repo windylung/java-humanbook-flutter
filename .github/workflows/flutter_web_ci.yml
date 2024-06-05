@@ -21,18 +21,18 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-#      - name: Run tests
-#        run: flutter test
+      #      - name: Run tests
+      #        run: flutter test
 
       - name: Build web
         run: flutter build web
 
       - name: Deploy to S3
         run: |
-                     aws s3 sync \
-                     --region ap-northeast-2 \
-                     build s3://humanbook-flutter-bucket \
-                     --delete
+          aws s3 sync \
+          build/web/ s3://humanbook-flutter-bucket/ \
+          --region ap-northeast-2 \
+          --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
