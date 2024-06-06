@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_java_humanbook/bookshelf.dart';
 import 'package:flutter_java_humanbook/login.dart';
 import 'header.dart'; // 커스텀 헤더 위젯 파일
 import 'book.dart';  // Book 모델 클래스 파일
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomePage(),
         '/login': (context) => LoginPage(),
+        '/bookshelf' : (context) => BookshelfScreen()
         // '/write': (context) => WritePage(),
       },
       debugShowCheckedModeBanner: false,
@@ -39,7 +41,7 @@ class HomePage extends StatelessWidget {
           SliverToBoxAdapter(
             child: BannerSlider(),
           ),
-          BookList(),  // 책 목록을 보여주는 BookList 위젯
+          BookList(uri: 'http://humanbook.kr/api/book/list'),// 책 목록을 보여주는 BookList 위젯
         ],
       ),
     );

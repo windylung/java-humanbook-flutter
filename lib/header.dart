@@ -29,7 +29,9 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Center(
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/bookshelf');
+            },
             child: Text(
               'BOOK',
               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),

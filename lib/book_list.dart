@@ -3,8 +3,13 @@ import 'book.dart'; // Book 모델 클래스 파일
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'book_detail.dart';
 
 class BookList extends StatefulWidget {
+  final String uri;
+
+  BookList({required this.uri});
+
   @override
   _BookListState createState() => _BookListState();
 }
@@ -15,13 +20,19 @@ class _BookListState extends State<BookList> {
   @override
   void initState() {
     super.initState();
-    books = fetchBooks();
+    books = fetchBooks(widget.uri);
   }
 
-  Future<List<Book>> fetchBooks() async {
-    final response =
-    await http.get(Uri.parse('http://humanbook.kr/api/book/list'));
+  @override
+  void didUpdateWidget(BookList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.uri != widget.uri) {
+      books = fetchBooks(widget.uri);
+    }
+  }
 
+  Future<List<Book>> fetchBooks(String uri) async {
+    final response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
       List<dynamic> booksJson = jsonDecode(response.body);
       return booksJson.map((json) => Book.fromJson(json)).toList();
@@ -112,40 +123,13 @@ class _BookListState extends State<BookList> {
                       ),
                     ),
                   );
-
-                    },
+                },
                 childCount: snapshot.data!.length,
               ),
             ),
           );
         }
       },
-    );
-  }
-}
-
-class BookDetailPage extends StatelessWidget {
-  final Book book;
-
-  BookDetailPage({required this.book});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(book.title ?? 'No title'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Title: ${book.title}'),
-            Text('Author: ${book.author}'),
-            // 추가적인 책 정보를 여기에 표시할 수 있습니다.
-          ],
-        ),
-      ),
     );
   }
 }
