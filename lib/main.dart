@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'humanbook',
-      theme: ThemeData(
+      theme: ThemeData( 
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white, // 기본 배경색을 흰색으로 설정
       ),
