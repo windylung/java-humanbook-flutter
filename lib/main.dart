@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_java_humanbook/board.dart';
 import 'package:flutter_java_humanbook/bookshelf.dart';
 import 'package:flutter_java_humanbook/login.dart';
+import 'package:flutter_java_humanbook/write/first_question.dart';
+import 'package:flutter_java_humanbook/write/second_question.dart';
+import 'package:flutter_java_humanbook/write/third_question.dart';
+import 'package:flutter_java_humanbook/write/write.dart';
 import 'header.dart'; // 커스텀 헤더 위젯 파일
 import 'book.dart';  // Book 모델 클래스 파일
 import 'book_list.dart';  // BookList 위젯 파일
@@ -21,8 +26,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
-        '/login': (context) => LoginPage(),
-        '/bookshelf' : (context) => BookshelfScreen()
+        '/login': (context) => LoginScreen(),
+        '/bookshelf' : (context) => BookshelfScreen(),
+        '/board' : (context) => BoardScreen(),
+        '/write' : (context) => WriteScreen(),
+        '/write/question1' : (context) => FirstQuestionScreen(),
+        '/write/question2' : (context) => SecondQuestionScreen(),
+        '/write/question3' : (context) => ThirdQuestionScreen(),
+
         // '/write': (context) => WritePage(),
       },
       debugShowCheckedModeBanner: false,

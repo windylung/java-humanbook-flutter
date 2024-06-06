@@ -41,6 +41,26 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
         ),
         Center(
           child: TextButton(
+            onPressed: () {Navigator.pushNamed(context, '/board');},
+            child: Text(
+              'BOARD',
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.visible,  // 텍스트가 사라짐 없이 보이도록 설정
+            ),
+          ),
+        ),
+        Center(
+          child: TextButton(
+            onPressed: () {Navigator.pushNamed(context, '/write');},
+            child: Text(
+              'WRITE',
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.visible,  // 텍스트가 사라짐 없이 보이도록 설정
+            ),
+          ),
+        ),
+        Center(
+          child: TextButton(
             onPressed: () {Navigator.pushNamed(context, '/login');},
             child: Text(
               'LOGIN',
