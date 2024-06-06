@@ -20,7 +20,7 @@ class _BookListState extends State<BookList> {
 
   Future<List<Book>> fetchBooks() async {
     final response =
-    await http.get(Uri.parse('http://localhost:8080/book/list'));
+    await http.get(Uri.parse('http://humanbook.kr/book/list'));
 
     if (response.statusCode == 200) {
       List<dynamic> booksJson = jsonDecode(response.body);
