@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -20,22 +21,32 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await http.post(
         Uri.parse('http://humanbook.kr/api/loginProc'),
         headers: <String, String>{
-          'Content-Type': 'application/x-www-form-urlencoded', // 콘텐츠 타입 수정
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        encoding: Encoding.getByName('utf-8'),
-        body: {"loginId": _loginIdController.text, "password":_passwordController.text},
+        body: {
+          'loginId': _loginIdController.text,
+          'password': _passwordController.text,
+        },
       );
 
+      setState(() {
+        body = response.body;
+      });
+
       if (response.statusCode == 200) {
-
-
-        Map<String, dynamic> memberJson = jsonDecode(response.body);
-        setState(() {
-          body = response.body;
-          _name = memberJson['name'];
-          _id = memberJson['id'];
-          _responseMessage = 'Login successful';
-        });
+        // Assuming JSON response is expected
+        try {
+          Map<String, dynamic> memberJson = jsonDecode(response.body);
+          setState(() {
+            _name = memberJson['name'];
+            _id = memberJson['id'];
+            _responseMessage = 'Login successful';
+          });
+        } catch (e) {
+          setState(() {
+            _responseMessage = 'Login successful, but failed to parse JSON.';
+          });
+        }
       } else {
         setState(() {
           _responseMessage = 'Login failed: ${response.body}';
@@ -43,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       setState(() {
-        print(e);
         _responseMessage = 'Error: $e';
       });
     }
@@ -82,7 +92,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text('Login'),
             ),
             SizedBox(height: 16),
-            Text("${body}"),
+            if (body != null)
+              SingleChildScrollView(
+                child: Text(body!),
+              ),
             Text(_responseMessage),
             if (_name != null && _id != null) ...[
               Text('ID: $_id'),
