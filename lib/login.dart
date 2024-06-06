@@ -19,12 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await http.post(
         Uri.parse('http://humanbook.kr/api/loginProc'),
         headers: <String, String>{
-          'Content-Type': 'x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded', // 콘텐츠 타입 수정
         },
-        body: jsonEncode({
+        body: {
           'loginId': _loginIdController.text,
           'password': _passwordController.text,
-        }),
+        },
       );
 
       if (response.statusCode == 200) {
