@@ -2,34 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class LoginPage extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _loginIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _responseMessage = '';
   String? _name;
   int? _id;
+  String? body;
 
   Future<void> _login() async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/login/member'),
+        Uri.parse('http://humanbook.kr/api/loginProc'),
         headers: <String, String>{
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded', // 콘텐츠 타입 수정
         },
-        body: jsonEncode({
-          'loginId': _loginIdController.text,
-          'password': _passwordController.text,
-        }),
+        encoding: Encoding.getByName('utf-8'),
+        body: {"loginId": _loginIdController.text, "password":_passwordController.text},
       );
 
       if (response.statusCode == 200) {
+
+
         Map<String, dynamic> memberJson = jsonDecode(response.body);
         setState(() {
+          body = response.body;
           _name = memberJson['name'];
           _id = memberJson['id'];
           _responseMessage = 'Login successful';
@@ -80,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text('Login'),
             ),
             SizedBox(height: 16),
+            Text("${body}"),
             Text(_responseMessage),
             if (_name != null && _id != null) ...[
               Text('ID: $_id'),
