@@ -4,9 +4,11 @@ import 'package:flutter_java_humanbook/login.dart';
 import 'header.dart'; // 커스텀 헤더 위젯 파일
 import 'book.dart';  // Book 모델 클래스 파일
 import 'book_list.dart';  // BookList 위젯 파일
-import 'mypage.dart'; // MyPage
+import 'mypage.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
+  setPathUrlStrategy();
   runApp(MyApp());
 }
 
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/login': (context) => LoginPage(),
         '/bookshelf' : (context) => BookshelfScreen(),
-        '/mypage': (context) => MyPage(),
+        '/mypage': (context) => MyPage(), 
         // '/write': (context) => WritePage(),
       },
       debugShowCheckedModeBanner: false,
