@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'mypage.dart';
 
 class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
 
@@ -18,7 +19,9 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
       ),
       leading: Center(
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/mypage');
+          },
           child: Text(
             'MY PAGE',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
