@@ -17,9 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/login/member'),
+        Uri.parse('http://humanbook.kr/api/loginProc'),
         headers: <String, String>{
-          'Content-Type': 'application/json',
+          'Content-Type': 'x-www-form-urlencoded',
         },
         body: jsonEncode({
           'loginId': _loginIdController.text,
