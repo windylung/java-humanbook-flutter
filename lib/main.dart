@@ -9,8 +9,11 @@ import 'package:flutter_java_humanbook/write/write.dart';
 import 'header.dart'; // 커스텀 헤더 위젯 파일
 import 'book.dart';  // Book 모델 클래스 파일
 import 'book_list.dart';  // BookList 위젯 파일
+import 'mypage.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
+  setPathUrlStrategy();
   runApp(MyApp());
 }
 
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'humanbook',
-      theme: ThemeData(
+      theme: ThemeData( 
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white, // 기본 배경색을 흰색으로 설정
       ),
@@ -33,8 +36,6 @@ class MyApp extends StatelessWidget {
         '/write/question1' : (context) => FirstQuestionScreen(),
         '/write/question2' : (context) => SecondQuestionScreen(),
         '/write/question3' : (context) => ThirdQuestionScreen(),
-
-        // '/write': (context) => WritePage(),
       },
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
