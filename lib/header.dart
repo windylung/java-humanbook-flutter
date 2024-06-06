@@ -46,11 +46,14 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/bookshelf');
+                    Navigator.pushNamed(context, '/board'); // '/board'로 이동하도록 수정
                   },
                   child: Text(
-                    'BOOK',
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                    'BOARD',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                     overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
                     textAlign: TextAlign.center, // 텍스트 가운데 정렬
                   ),
@@ -59,11 +62,46 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login');
+                    Navigator.pushNamed(context, '/write'); // '/write'로 이동하도록 수정
+                  },
+                  child: Text(
+                    'WRITE',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
+                    textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                  ),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/bookshelf'); // '/bookshelf'로 이동하도록 수정
+                  },
+                  child: Text(
+                    'BOOK',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
+                    textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                  ),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login'); // '/login'으로 이동하도록 수정
                   },
                   child: Text(
                     'LOGIN',
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                     overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
                     textAlign: TextAlign.center, // 텍스트 가운데 정렬
                   ),
