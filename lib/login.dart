@@ -13,6 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _responseMessage = '';
   String? _name;
   int? _id;
+  String? body;
 
   Future<void> _login() async {
     try {
@@ -26,8 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.statusCode == 200) {
+
+
         Map<String, dynamic> memberJson = jsonDecode(response.body);
         setState(() {
+          body = response.body;
           _name = memberJson['name'];
           _id = memberJson['id'];
           _responseMessage = 'Login successful';
@@ -78,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text('Login'),
             ),
             SizedBox(height: 16),
+            Text("${body}"),
             Text(_responseMessage),
             if (_name != null && _id != null) ...[
               Text('ID: $_id'),
