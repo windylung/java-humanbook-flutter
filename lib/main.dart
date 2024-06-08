@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/write/question1' : (context) => FirstQuestionScreen(),
         '/write/question2' : (context) => SecondQuestionScreen(),
         '/write/question3' : (context) => ThirdQuestionScreen(),
+        '/mypage' : (context) => MyPage(),
       },
       debugShowCheckedModeBanner: false,
       // home: HomePage(),
