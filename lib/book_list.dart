@@ -7,8 +7,9 @@ import 'book_detail.dart';
 
 class BookList extends StatefulWidget {
   final String uri;
+  final Function(Book)? onLike; // 추가: 좋아요 상태가 변경될 때 호출되는 콜백
 
-  BookList({required this.uri});
+  BookList({required this.uri, this.onLike});
 
   @override
   _BookListState createState() => _BookListState();
@@ -41,6 +42,15 @@ class _BookListState extends State<BookList> {
     }
   }
 
+  void _toggleLike(Book book) {
+    setState(() {
+      book.isLiked = !book.isLiked;
+    });
+    if (widget.onLike != null) {
+      widget.onLike!(book);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Book>>(
@@ -60,13 +70,13 @@ class _BookListState extends State<BookList> {
           );
         } else {
           return SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 50.0), // 좌우 여백 설정
+            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 50.0),
             sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 한 행에 3개의 카드
+                crossAxisCount: 3,
                 crossAxisSpacing: 36.0,
                 mainAxisSpacing: 36.0,
-                childAspectRatio: 390 / 232, // 카드 비율
+                childAspectRatio: 390 / 232,
               ),
               delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -82,13 +92,13 @@ class _BookListState extends State<BookList> {
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      color: Colors.grey.shade100, // 배경색 설정
+                      color: Colors.grey.shade100,
                       child: Row(
                         children: [
                           Container(
                             width: 157,
                             height: 213,
-                            margin: EdgeInsets.symmetric(horizontal: 30.0), // 이미지와 폰트 사이의 간격 설정
+                            margin: EdgeInsets.symmetric(horizontal: 30.0),
                             child: Image.asset('assets/cover.png', fit: BoxFit.cover),
                           ),
                           Expanded(
@@ -100,21 +110,28 @@ class _BookListState extends State<BookList> {
                                   book.title ?? 'No title',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.0, // 폰트 크기 키우기
+                                    fontSize: 20.0,
                                   ),
-                                  softWrap: true, // 추가: 텍스트가 컨테이너를 넘어갈 때 자동으로 줄바꿈
-                                  overflow: TextOverflow.ellipsis, // 추가: 긴 텍스트를 ...로 처리
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 SizedBox(height: 8.0),
                                 Text(
                                   book.author ?? 'No author',
                                   style: TextStyle(
-                                      fontSize: 15.0, // 폰트 크기 키우기
+                                      fontSize: 15.0,
                                       fontWeight: FontWeight.normal
                                   ),
-                                  softWrap: true, // 추가
-                                  maxLines: 1, // 추가: 최대 라인 수 설정
-                                  overflow: TextOverflow.ellipsis, // 추가
+                                  softWrap: true,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    book.isLiked ? Icons.favorite : Icons.favorite_border,
+                                    color: book.isLiked ? Colors.red : Colors.grey,
+                                  ),
+                                  onPressed: () => _toggleLike(book),
                                 ),
                               ],
                             ),
