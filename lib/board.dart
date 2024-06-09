@@ -21,7 +21,7 @@ class _BoardScreenState extends State<BoardScreen> {
   Future<void> _fetchBoardList() async {
     try {
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://humanbook.kr/api/getBoardList');
+      final response = await dio.get('http://humanbook.kr/api/board/getBoardList');
       if (response.statusCode == 200) {
         setState(() {
           boards = List<BoardListViewResponse>.from(response.data.map((board) => BoardListViewResponse.fromJson(board)));

@@ -25,7 +25,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
   Future<void> _fetchBoardDetails() async {
     try {
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://humanbook.kr/api/getBoard/${widget.boardId}');
+      final response = await dio.get('http://humanbook.kr/api/board/getBoard/${widget.boardId}');
       if (response.statusCode == 200) {
         setState(() {
           board = BoardViewResponse.fromJson(response.data);
