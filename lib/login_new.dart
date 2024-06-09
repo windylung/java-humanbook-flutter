@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 class LoginScreenNew extends StatefulWidget {
   @override
@@ -11,30 +12,69 @@ class _LoginScreenState extends State<LoginScreenNew> {
   final TextEditingController _loginIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _responseMessage = '';
+  String? _name;
+  int? _id;
+  Dio dio = Dio();
+  var cookieJar = CookieJar();
+
+  @override
+  void initState() {
+    super.initState();
+    dio.interceptors.add(CookieManager(cookieJar));
+  }
 
   Future<void> _login() async {
-    final url = Uri.parse('http://humanbook.kr/api/loginProc');
-    final body = {
-      'loginId': _loginIdController.text,
-      'password': _passwordController.text,
-    };
-
     try {
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/x-www-form-urlencoded',
+      final response = await dio.post(
+        'http://humanbook.kr/api/loginProc',
+        data: {
+          'loginId': _loginIdController.text,
+          'password': _passwordController.text,
         },
-        body: body,
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+
+      setState(() {
+        if (response.statusCode == 200) {
+          try {
+            Map<String, dynamic> memberJson = response.data;
+            _name = memberJson['name'];
+            _id = memberJson['id'];
+            _responseMessage = 'Login successful';
+          } catch (e) {
+            _responseMessage = 'Login successful, but failed to parse JSON.';
+          }
+        } else {
+          _responseMessage = 'Login failed: ${response.data}';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _responseMessage = 'Error: $e';
+      });
+    }
+  }
+
+  Future<void> _getUserDetails() async {
+    try {
+      final response = await dio.get(
+        'http://humanbook.kr/api/user/mypage',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
         setState(() {
-          _responseMessage = 'Login successful';
+          _responseMessage = 'User details: ${response.data}';
         });
       } else {
         setState(() {
-          _responseMessage = 'Login failed: ${response.body}';
+          _responseMessage = 'Failed to get user details: ${response.data}';
         });
       }
     } catch (e) {
@@ -48,7 +88,7 @@ class _LoginScreenState extends State<LoginScreenNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login_new'),
+        title: Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -77,11 +117,23 @@ class _LoginScreenState extends State<LoginScreenNew> {
               child: Text('Login'),
             ),
             SizedBox(height: 16),
-            Text(_responseMessage),
+            ElevatedButton(
+              onPressed: _getUserDetails,
+              child: Text('Get User Details'),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(_responseMessage),
+              ),
+            ),
+            if (_name != null && _id != null) ...[
+              Text('ID: $_id'),
+              Text('Name: $_name'),
+            ],
           ],
         ),
       ),
     );
   }
 }
-

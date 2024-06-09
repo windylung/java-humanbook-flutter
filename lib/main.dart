@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         '/write/question1' : (context) => FirstQuestionScreen(),
         '/write/question2' : (context) => SecondQuestionScreen(),
         '/write/question3' : (context) => ThirdQuestionScreen(),
-      '/mypage': (context) => MyPage(likedBooks: likedBooks),
+        '/mypage': (context) => MyPage(likedBooks: likedBooks),
 
       },
       debugShowCheckedModeBanner: false,
