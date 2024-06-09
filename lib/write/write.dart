@@ -19,7 +19,7 @@ class _WriteScreenState extends State<WriteScreen> {
   Future<void> _fetchManuscriptData() async {
     try {
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://localhost:8080/api/manuscripts/user');
+      final response = await dio.get('http://humanbook.kr/api/manuscripts/user');
       if (response.statusCode == 200) {
         setState(() {
           steps = List<int>.from(response.data.map((manuscript) => manuscript['step']));
