@@ -15,7 +15,7 @@ class _FirstQuestionScreenState extends State<FirstQuestionScreen> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   final String _question = '첫 번째 질문';
-  final String _loadEndpoint = 'http://humanbook.kr/api/user/1'; // step을 1로 가정
+  final String _loadEndpoint = 'http://humanbook.kr/api/manuscripts/user/1'; // step을 1로 가정
   final String _saveEndpoint = 'http://humanbook.kr/api/manuscripts';
 
   @override
@@ -48,7 +48,6 @@ class _FirstQuestionScreenState extends State<FirstQuestionScreen> {
   Future<void> _saveAnswer() async {
     try {
       final cookies = Provider.of<AuthProvider>(context, listen: false).getCookies();
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final response = await http.put(
         Uri.parse(_saveEndpoint),
         headers: {
