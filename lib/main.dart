@@ -7,6 +7,8 @@ import 'package:flutter_java_humanbook/write/first_question.dart';
 import 'package:flutter_java_humanbook/write/second_question.dart';
 import 'package:flutter_java_humanbook/write/third_question.dart';
 import 'package:flutter_java_humanbook/write/write.dart';
+import 'package:provider/provider.dart';
+import 'auth_provider.dart';
 import 'header.dart'; // 커스텀 헤더 위젯 파일
 import 'book.dart';  // Book 모델 클래스 파일
 import 'book_list.dart';  // BookList 위젯 파일
@@ -15,7 +17,12 @@ import 'package:url_strategy/url_strategy.dart';
 
 void main() {
   setPathUrlStrategy();
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AuthProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -45,18 +52,33 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Colors.white,
       ),
       initialRoute: '/',
-      routes: {
-        '/': (context) => HomePage(onLike: _handleLike),
-        '/login': (context) => LoginScreen(),
-        '/login_new': (context) => LoginScreenNew(),
-        '/bookshelf' : (context) => BookshelfScreen(),
-        '/board' : (context) => BoardScreen(),
-        '/write' : (context) => WriteScreen(),
-        '/write/question1' : (context) => FirstQuestionScreen(),
-        '/write/question2' : (context) => SecondQuestionScreen(),
-        '/write/question3' : (context) => ThirdQuestionScreen(),
-        '/mypage': (context) => MyPage(likedBooks: likedBooks),
-
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (_) => HomePage(onLike: _handleLike));
+          case '/login':
+            return MaterialPageRoute(builder: (_) => LoginScreen());
+          case '/login_new':
+            return MaterialPageRoute(builder: (_) => LoginScreenNew());
+          case '/bookshelf':
+            return MaterialPageRoute(builder: (_) => BookshelfScreen());
+          case '/board':
+            return MaterialPageRoute(builder: (_) => BoardScreen());
+          case '/write':
+            return MaterialPageRoute(builder: (_) => WriteScreen());
+          case '/write/question1':
+            return MaterialPageRoute(builder: (_) => FirstQuestionScreen());
+          case '/write/question2':
+            return MaterialPageRoute(builder: (_) => SecondQuestionScreen());
+          case '/write/question3':
+            return MaterialPageRoute(builder: (_) => ThirdQuestionScreen());
+          case '/mypage':
+            return MaterialPageRoute(builder: (_) => MyPage(likedBooks: likedBooks));
+          default:
+            return MaterialPageRoute(builder: (_) => Scaffold(
+              body: Center(child: Text('Page not found')),
+            ));
+        }
       },
       debugShowCheckedModeBanner: false,
     );
@@ -70,6 +92,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: CustomHeader(),
       body: CustomScrollView(
@@ -77,6 +101,16 @@ class HomePage extends StatelessWidget {
           SliverToBoxAdapter(
             child: BannerSlider(),
           ),
+          if (authProvider.isLoggedIn)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  '환영합니다!',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           BookList(uri: 'http://humanbook.kr/api/book/list', onLike: onLike),
         ],
       ),
