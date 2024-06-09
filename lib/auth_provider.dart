@@ -4,47 +4,56 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 class AuthProvider with ChangeNotifier {
-  Dio _dio;
   bool _isLoggedIn = false;
-  CookieJar _cookieJar = CookieJar();
-
-  AuthProvider() : _dio = Dio(BaseOptions(
+  String _cookie = '';
+  Dio dio = Dio(BaseOptions(
     baseUrl: 'http://humanbook.kr',
     extra: {'withCredentials': true},
-  )) {
-    _dio.interceptors.add(CookieManager(_cookieJar));
+  ));
+
+  AuthProvider() {
+    dio.interceptors.add(CookieManager(CookieJar()));
   }
 
-  Dio get dio => _dio;
   bool get isLoggedIn => _isLoggedIn;
 
   Future<void> login(String loginId, String password) async {
     try {
-      final response = await _dio.post('/api/loginProc',
-          data: {'loginId': loginId, 'password': password},
-          options: Options(contentType: Headers.formUrlEncodedContentType));
+      final response = await dio.post(
+        '/api/loginProc',
+        data: {
+          'loginId': loginId,
+          'password': password,
+        },
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+
       if (response.statusCode == 200) {
         _isLoggedIn = true;
+        _cookie = response.headers['set-cookie']?.join('; ') ?? '';
         notifyListeners();
-        _printAuthDetails();  // 로그인 성공 후 디테일 출력
       } else {
-        throw Exception('Failed to login');
+        throw Exception('Login failed');
       }
     } catch (e) {
-      throw Exception('Failed to login: $e');
+      throw Exception('Error: $e');
     }
   }
 
-  Future<void> logout() async {
-    // 로그아웃 로직
+  void logout() {
     _isLoggedIn = false;
+    _cookie = '';
     notifyListeners();
-    _printAuthDetails();  // 로그아웃 후 디테일 출력
   }
 
-  void _printAuthDetails() async {
+  String getCookies() {
+    return _cookie;
+  }
+
+  void _printAuthDetails() {
     print('Logged in: $_isLoggedIn');
-    final cookies = await _cookieJar.loadForRequest(Uri.parse('http://humanbook.kr'));
-    print('Cookies: $cookies');
+    print('Cookies: $_cookie');
   }
 }
