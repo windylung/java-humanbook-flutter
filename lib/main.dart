@@ -18,18 +18,35 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List<Book> likedBooks = [];
+
+  void _handleLike(Book book) {
+    setState(() {
+      if (book.isLiked) {
+        likedBooks.add(book);
+      } else {
+        likedBooks.removeWhere((b) => b.title == book.title && b.author == book.author);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'humanbook',
-      theme: ThemeData( 
+      theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white, // 기본 배경색을 흰색으로 설정
+        scaffoldBackgroundColor: Colors.white,
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => HomePage(onLike: _handleLike),
         '/login': (context) => LoginScreen(),
         '/login_new': (context) => LoginScreenNew(),
         '/bookshelf' : (context) => BookshelfScreen(),
@@ -38,25 +55,29 @@ class MyApp extends StatelessWidget {
         '/write/question1' : (context) => FirstQuestionScreen(),
         '/write/question2' : (context) => SecondQuestionScreen(),
         '/write/question3' : (context) => ThirdQuestionScreen(),
+      '/mypage': (context) => MyPage(likedBooks: likedBooks),
 
       },
       debugShowCheckedModeBanner: false,
-      // home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
+  final Function(Book) onLike;
+
+  HomePage({required this.onLike});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomHeader(),  // 커스텀 헤더 사용
+      appBar: CustomHeader(),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: BannerSlider(),
           ),
-          BookList(uri: 'http://humanbook.kr/api/book/list'),// 책 목록을 보여주는 BookList 위젯
+          BookList(uri: 'http://humanbook.kr/api/book/list', onLike: onLike),
         ],
       ),
     );
@@ -70,7 +91,6 @@ class BannerSlider extends StatelessWidget {
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.4,
-      // height: 600,  // 고정 높이 설정
       child: PageView(
         children: [
           Image.asset('assets/banner.png', fit: BoxFit.cover),
