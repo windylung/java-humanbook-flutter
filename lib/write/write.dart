@@ -23,6 +23,8 @@ class _WriteScreenState extends State<WriteScreen> {
       if (response.statusCode == 200) {
         setState(() {
           steps = List<int>.from(response.data.map((manuscript) => manuscript['step']));
+          print(response.data);
+          print(steps);
         });
       } else {
         throw Exception('Failed to load manuscripts');
