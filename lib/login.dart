@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,21 +15,21 @@ class _LoginScreenState extends State<LoginScreen> {
   int? _id;
   String? body;
 
-  Future<void> _login() async {
+  Future<void> login(String username, String password) async {
+    final url = Uri.parse('http://humanbook.kr/api/loginProc');
+    final body = {'loginId': username, 'password': password};
+
     try {
       final response = await http.post(
-        Uri.parse('http://humanbook.kr/api/loginProc'),
-        headers: <String, String>{
+        url,
+        headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: {
-          'loginId': _loginIdController.text,
-          'password': _passwordController.text,
-        },
+        body: body,
       );
 
       setState(() {
-        body = response.body;
+        this.body = response.body;
       });
 
       if (response.statusCode == 200) {
@@ -57,6 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
         _responseMessage = 'Error: $e';
       });
     }
+  }
+
+  void _handleLogin() async {
+    await login(_loginIdController.text, _passwordController.text);
   }
 
   @override
@@ -88,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _login,
+              onPressed: _handleLogin,
               child: Text('Login'),
             ),
             SizedBox(height: 16),
