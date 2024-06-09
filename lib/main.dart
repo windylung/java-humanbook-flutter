@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_java_humanbook/board.dart';
 import 'package:flutter_java_humanbook/bookshelf.dart';
 import 'package:flutter_java_humanbook/login.dart';
+import 'package:flutter_java_humanbook/login_new.dart';
 import 'package:flutter_java_humanbook/write/first_question.dart';
 import 'package:flutter_java_humanbook/write/second_question.dart';
 import 'package:flutter_java_humanbook/write/third_question.dart';
@@ -30,12 +31,14 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomePage(),
         '/login': (context) => LoginScreen(),
+        '/login_new': (context) => LoginScreenNew(),
         '/bookshelf' : (context) => BookshelfScreen(),
         '/board' : (context) => BoardScreen(),
         '/write' : (context) => WriteScreen(),
         '/write/question1' : (context) => FirstQuestionScreen(),
         '/write/question2' : (context) => SecondQuestionScreen(),
         '/write/question3' : (context) => ThirdQuestionScreen(),
+
       },
       debugShowCheckedModeBanner: false,
       // home: HomePage(),

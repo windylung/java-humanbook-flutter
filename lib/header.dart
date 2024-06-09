@@ -94,7 +94,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login'); // '/login'으로 이동하도록 수정
+                    Navigator.pushNamed(context, '/login_new'); // '/login'으로 이동하도록 수정
                   },
                   child: Text(
                     'LOGIN',
