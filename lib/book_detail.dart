@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'book.dart';
+
 class BookDetailPage extends StatelessWidget {
   final Book book;
 
@@ -11,15 +12,72 @@ class BookDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(book.title ?? 'No title'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Title: ${book.title}'),
-            Text('Author: ${book.author}'),
-            // 추가적인 책 정보를 여기에 표시할 수 있습니다.
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Image.asset(
+                  'assets/cover.png', // 책 표지 이미지 경로
+                  width: 150,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                book.title ?? 'No title',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                'Author: ${book.author}',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Divider(color: Colors.grey),
+              SizedBox(height: 16.0),
+              Text(
+                '책 설명',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                '설명설명설명설명설명',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Divider(color: Colors.grey),
+              SizedBox(height: 16.0),
+              Text(
+                '기타 정보',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                '기타 정보 공간',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
