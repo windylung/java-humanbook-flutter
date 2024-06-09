@@ -1,7 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_java_humanbook/auth_provider.dart';
 
-class WriteScreen extends StatelessWidget {
-  WriteScreen({super.key});
+class WriteScreen extends StatefulWidget {
+  @override
+  _WriteScreenState createState() => _WriteScreenState();
+}
+
+class _WriteScreenState extends State<WriteScreen> {
+  List<int> steps = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchManuscriptData();
+  }
+
+  Future<void> _fetchManuscriptData() async {
+    try {
+      final dio = Provider.of<AuthProvider>(context, listen: false).dio;
+      final response = await dio.get('http://localhost:8080/api/manuscripts/user');
+      if (response.statusCode == 200) {
+        setState(() {
+          steps = List<int>.from(response.data.map((manuscript) => manuscript['step']));
+        });
+      } else {
+        throw Exception('Failed to load manuscripts');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,11 +39,11 @@ class WriteScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            HoverImage(assetPath: 'assets/card1.png', route: '/write/question1'),
+            HoverImage(assetPath: 'assets/card1.png', route: '/write/question1', isVisible: steps.contains(1)),
             SizedBox(width: 10),
-            HoverImage(assetPath: 'assets/card2.png', route: '/write/question2'),
+            HoverImage(assetPath: 'assets/card2.png', route: '/write/question2', isVisible: steps.contains(2)),
             SizedBox(width: 10),
-            HoverImage(assetPath: 'assets/card3.png', route: '/write/question3'),
+            HoverImage(assetPath: 'assets/card3.png', route: '/write/question3', isVisible: steps.contains(3)),
           ],
         ),
       ),
@@ -25,8 +54,9 @@ class WriteScreen extends StatelessWidget {
 class HoverImage extends StatefulWidget {
   final String assetPath;
   final String route;
+  final bool isVisible;
 
-  HoverImage({required this.assetPath, required this.route});
+  HoverImage({required this.assetPath, required this.route, required this.isVisible});
 
   @override
   _HoverImageState createState() => _HoverImageState();
@@ -45,7 +75,7 @@ class _HoverImageState extends State<HoverImage> {
           Navigator.pushNamed(context, widget.route);
         },
         child: AnimatedOpacity(
-          opacity: _isHovering ? 1.0 : 0.4,
+          opacity: widget.isVisible ? (_isHovering ? 1.0 : 0.4) : 0.4,
           duration: Duration(milliseconds: 200),
           child: AnimatedContainer(
             duration: Duration(milliseconds: 200),
