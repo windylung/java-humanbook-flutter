@@ -39,11 +39,34 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
     }
   }
 
+  Future<void> _deleteBoard() async {
+    try {
+      final dio = Provider.of<AuthProvider>(context, listen: false).dio;
+      final response = await dio.delete('http://humanbook.kr/api/board/${widget.boardId}/del');
+      if (response.statusCode == 200) {
+        // 성공 시 팝업 띄우고 이전 페이지로 이동
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('삭제되었습니다.')));
+        Navigator.pop(context);
+      } else {
+        throw Exception('Failed to delete board');
+      }
+    } catch (e) {
+      // 오류 발생 시 팝업 띄움
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('삭제에 실패했습니다: $e')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Board Details'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: _deleteBoard,
+          ),
+        ],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
