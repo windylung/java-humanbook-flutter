@@ -25,7 +25,7 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
   Future<void> _fetchBoardDetails() async {
     try {
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://humanbook.kr/api/board/getBoard/${widget.boardId}');
+      final response = await dio.get('http://humanbook.kr/api/getBoard/${widget.boardId}');
       if (response.statusCode == 200) {
         setState(() {
           board = BoardViewResponse.fromJson(response.data);
@@ -58,14 +58,15 @@ class _BoardDetailScreenState extends State<BoardDetailScreen> {
             SizedBox(height: 16),
             Text(board.content, style: TextStyle(fontSize: 16)),
             SizedBox(height: 24),
+            Text('Comments', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             Expanded(
               child: ListView.builder(
                 itemCount: board.comments.length,
                 itemBuilder: (context, index) {
                   final comment = board.comments[index];
                   return ListTile(
-                    title: Text(comment.content),
-                    subtitle: Text('By ${comment.author}'),
+                    title: Text(comment.comment),
+                    subtitle: Text('By ${comment.nickname} on ${comment.createdAt}'),
                   );
                 },
               ),
@@ -98,15 +99,33 @@ class BoardViewResponse {
 }
 
 class CommentResponse {
-  final String content;
-  final String author;
+  final int id;
+  final String comment;
+  final String createdAt;
+  final String modifiedAt;
+  final String nickname;
+  final int memberId;
+  final int boardId;
 
-  CommentResponse({required this.content, required this.author});
+  CommentResponse({
+    required this.id,
+    required this.comment,
+    required this.createdAt,
+    required this.modifiedAt,
+    required this.nickname,
+    required this.memberId,
+    required this.boardId,
+  });
 
   factory CommentResponse.fromJson(Map<String, dynamic> json) {
     return CommentResponse(
-      content: json['content'],
-      author: json['author'],
+      id: json['id'],
+      comment: json['comment'],
+      createdAt: json['createdAt'],
+      modifiedAt: json['modifiedAt'],
+      nickname: json['nickname'],
+      memberId: json['memberId'],
+      boardId: json['boardId'],
     );
   }
 }
