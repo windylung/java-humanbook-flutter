@@ -77,7 +77,7 @@ class _HoverImageState extends State<HoverImage> {
           Navigator.pushNamed(context, widget.route);
         },
         child: AnimatedOpacity(
-          opacity: widget.isVisible ? (_isHovering ? 1.0 : 0.4) : 0.4,
+          opacity: widget.isVisible ? (_isHovering ? 1.0 : 1.0) : 0.4,
           duration: Duration(milliseconds: 200),
           child: AnimatedContainer(
             duration: Duration(milliseconds: 200),
