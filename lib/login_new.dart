@@ -84,6 +84,33 @@ class _LoginScreenState extends State<LoginScreenNew> {
     }
   }
 
+  Future<void> _getUserName() async {
+    try {
+      final response = await dio.get(
+        'http://humanbook.kr/api/user/mypage2',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _responseMessage = 'User name: ${response.data}';
+        });
+      } else {
+        setState(() {
+          _responseMessage = 'Failed to get user name: ${response.data}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _responseMessage = 'Error: $e';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +147,11 @@ class _LoginScreenState extends State<LoginScreenNew> {
             ElevatedButton(
               onPressed: _getUserDetails,
               child: Text('Get User Details'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _getUserName,
+              child: Text('Get User Name'),
             ),
             SizedBox(height: 16),
             Expanded(
