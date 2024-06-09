@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_java_humanbook/board_detail.dart';
+import 'package:flutter_java_humanbook/wirte_board_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_java_humanbook/auth_provider.dart';
 import 'package:dio/dio.dart';
@@ -21,7 +22,7 @@ class _BoardScreenState extends State<BoardScreen> {
   Future<void> _fetchBoardList() async {
     try {
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://humanbook.kr/api/board/getBoardList');
+      final response = await dio.get('http://humanbook.kr/api/getBoardList');
       if (response.statusCode == 200) {
         setState(() {
           boards = List<BoardListViewResponse>.from(response.data.map((board) => BoardListViewResponse.fromJson(board)));
@@ -45,8 +46,8 @@ class _BoardScreenState extends State<BoardScreen> {
         itemBuilder: (context, index) {
           final board = boards[index];
           return ListTile(
-            title: Text(board.title),
-            subtitle: Text(board.author),
+            title: Text(board.title ?? 'No title'),
+            subtitle: Text(board.author ?? 'No author'),
             onTap: () {
               Navigator.push(
                 context,
@@ -56,22 +57,31 @@ class _BoardScreenState extends State<BoardScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WriteBoardScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
 
 class BoardListViewResponse {
   final int id;
-  final String title;
-  final String author;
+  final String? title;
+  final String? author;
 
-  BoardListViewResponse({required this.id, required this.title, required this.author});
+  BoardListViewResponse({required this.id, this.title, this.author});
 
   factory BoardListViewResponse.fromJson(Map<String, dynamic> json) {
     return BoardListViewResponse(
       id: json['id'],
-      title: json['title'],
-      author: json['author'],
+      title: json['title'] as String?,
+      author: json['author'] as String?,
     );
   }
 }
