@@ -61,7 +61,7 @@ class _BoardScreenState extends State<BoardScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WriteBoardScreen()),
+            MaterialPageRoute(builder: (context) => BoardWriteScreen()),
           );
         },
         child: Icon(Icons.add),
@@ -81,7 +81,7 @@ class BoardListViewResponse {
     return BoardListViewResponse(
       id: json['id'],
       title: json['title'] as String?,
-      author: json['author'] as String?,
+      author: json['owner'] as String?,
     );
   }
 }

@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:flutter_java_humanbook/auth_provider.dart';
 import 'package:dio/dio.dart';
 
-class WriteBoardScreen extends StatefulWidget {
+class BoardWriteScreen extends StatefulWidget {
   @override
-  _WriteBoardScreenState createState() => _WriteBoardScreenState();
+  _BoardWriteScreenState createState() => _BoardWriteScreenState();
 }
 
-class _WriteBoardScreenState extends State<WriteBoardScreen> {
+class _BoardWriteScreenState extends State<BoardWriteScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
@@ -41,12 +41,12 @@ class _WriteBoardScreenState extends State<WriteBoardScreen> {
         return AlertDialog(
           title: Text(title),
           content: Text(content),
-          actions: [
-            TextButton(
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('확인'),
             ),
           ],
         );
@@ -58,23 +58,26 @@ class _WriteBoardScreenState extends State<WriteBoardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Write Board'),
+        title: Text('글 쓰기'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: '제목'),
+              decoration: InputDecoration(
+                labelText: '제목',
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             TextField(
               controller: _contentController,
-              decoration: InputDecoration(labelText: '내용'),
-              maxLines: 10,
+              decoration: InputDecoration(
+                labelText: '내용',
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _submitBoard,
               child: Text('저장하기'),

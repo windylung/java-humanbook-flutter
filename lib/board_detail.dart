@@ -115,7 +115,7 @@ class BoardViewResponse {
       id: json['id'],
       title: json['title'],
       content: json['content'],
-      author: json['author'],
+      author: json['owner'],
       comments: List<CommentResponse>.from(json['comments'].map((comment) => CommentResponse.fromJson(comment))),
     );
   }
