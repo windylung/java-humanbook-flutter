@@ -10,6 +10,10 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    String userId = 'User123';
+    String userName = 'Name123';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('My Page'),
@@ -19,9 +23,24 @@ class MyPage extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text(
-                '좋아요 누른 책들',
-                style: TextStyle(fontSize: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ID: $userId',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    'Name: $userName',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    '좋아요 누른 책들',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
               ),
             ),
           ),
