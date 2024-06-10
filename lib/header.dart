@@ -19,7 +19,7 @@ class _CustomHeaderState extends State<CustomHeader> {
   Future<void> _handleLogout() async {
     try {
       Dio dio = Dio();
-      Response response = await dio.post(
+      Response response = await dio.get(
         'http://humanbook.kr/api/logout',
       );
 
