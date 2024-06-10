@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'mypage.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_java_humanbook/auth_provider.dart';
 
 class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   CustomHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = Provider.of<AuthProvider>(context).isLoggedIn;
+
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -91,22 +94,40 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login_new'); // '/login'으로 이동하도록 수정
-                  },
-                  child: Text(
-                    'LOGIN',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+              if (!isLoggedIn)
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login_new'); // '/login'으로 이동하도록 수정
+                    },
+                    child: Text(
+                      'LOGIN',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
+                      textAlign: TextAlign.center, // 텍스트 가운데 정렬
                     ),
-                    overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                    textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                  ),
+                )
+              else
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/mypage'); // '/mypage'로 이동하도록 수정
+                    },
+                    child: Text(
+                      'MY PAGE',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
+                      textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],
