@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_java_humanbook/joinRequest.dart';
+import 'package:flutter_java_humanbook/joinRequest.dart';
 
 class JoinScreen extends StatefulWidget {
   @override
@@ -40,32 +42,26 @@ class _JoinScreenState extends State<JoinScreen> {
     try {
       Dio dio = Dio();
 
-      // JoinRequest 객체를 가져옴
-      Response joinResponse = await dio.get('http://humanbook.kr/api/join');
-      if (joinResponse.statusCode == 200) {
-        Map<String, dynamic> joinRequest = joinResponse.data;
+      // JoinRequest 객체 생성
+      JoinRequest joinRequest = JoinRequest(
+        loginId: id,
+        password: password,
+        passwordCheck: passwordCheck,
+        name: name,
+      );
 
-        // JoinRequest 객체의 값 수정
-        joinRequest['loginId'] = id;
-        joinRequest['password'] = password;
-        joinRequest['passwordCheck'] = passwordCheck;
-        joinRequest['name'] = name;
+      // JoinRequest 객체를 JSON으로 변환하여 POST 요청으로 보냄
+      Response response = await dio.post(
+        'http://humanbook.kr/api/join',
+        data: joinRequest.toJson(),
+      );
 
-        // 수정된 JoinRequest 객체를 POST 요청으로 보냄
-        Response response = await dio.post(
-          'http://humanbook.kr/api/join',
-          data: joinRequest,
-        );
-
-        if (response.statusCode == 200) {
-          // 회원가입 성공 처리
-          print('회원가입 성공');
-        } else {
-          // 회원가입 실패 처리
-          print('회원가입 실패');
-        }
+      if (response.statusCode == 200) {
+        // 회원가입 성공 처리
+        print('회원가입 성공');
       } else {
-        print('JoinRequest 객체를 가져오는 데 실패했습니다.');
+        // 회원가입 실패 처리
+        print('회원가입 실패');
       }
     } catch (e) {
       // 네트워크 오류 등 예외 처리
