@@ -91,6 +91,7 @@ class _GetBookScreenState extends State<GetBookScreen> {
 
     // EPUB 파일 생성
     var epubBytes = await EpubWriter.writeBook(book);
+    print(epubBytes);
 
     return Book(title: title, author: author, epubContent: epubBytes);
   }
@@ -105,9 +106,10 @@ class _GetBookScreenState extends State<GetBookScreen> {
       // 'cover': book.cover != null ? MultipartFile.fromBytes(book.cover!, filename: 'cover.jpg') : null, // 표지 이미지 생략
       'epub': book.epubContent != null ? MultipartFile.fromBytes(book.epubContent!, filename: '${book.title}.epub') : null,
     });
+    print(formData);
 
     try {
-      final response = await dio.post('http://humanbook.kr/api/books', data: formData);
+      final response = await dio.post('http://humanbook.kr/api/manuscripts/books', data: formData);
       if (response.statusCode == 200) {
         print('Book saved successfully');
       } else {
