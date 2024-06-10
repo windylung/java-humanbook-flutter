@@ -19,6 +19,25 @@ class _JoinScreenState extends State<JoinScreen> {
     String passwordCheck = _passwordCheckController.text;
     String name = _nameController.text;
 
+    // 비밀번호 확인
+    if (password != passwordCheck) {
+      // 비밀번호와 비밀번호 확인 값이 다를 경우
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('오류'),
+          content: Text('비밀번호와 비밀번호 확인이 일치하지 않습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('확인'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
     try {
       Dio dio = Dio();
       Response response = await dio.post(
@@ -27,7 +46,7 @@ class _JoinScreenState extends State<JoinScreen> {
           'loginId': id,
           'password': password,
           'name': name,
-          'paswordCheck' : passwordCheck
+          'passwordCheck': passwordCheck, // 오타 수정
         },
       );
 
