@@ -12,7 +12,6 @@ class _JoinScreenState extends State<JoinScreen> {
   final TextEditingController _passwordCheckController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-
   Future<void> _handleJoin() async {
     String id = _idController.text;
     String password = _passwordController.text;
@@ -40,22 +39,33 @@ class _JoinScreenState extends State<JoinScreen> {
 
     try {
       Dio dio = Dio();
-      Response response = await dio.post(
-        'http://humanbook.kr/api/join',
-        data: {
-          'loginId': id,
-          'password': password,
-          'name': name,
-          'passwordCheck': passwordCheck, // 오타 수정
-        },
-      );
 
-      if (response.statusCode == 200) {
-        // 회원가입 성공 처리
-        print('회원가입 성공');
+      // JoinRequest 객체를 가져옴
+      Response joinResponse = await dio.get('http://humanbook.kr/api/join');
+      if (joinResponse.statusCode == 200) {
+        Map<String, dynamic> joinRequest = joinResponse.data;
+
+        // JoinRequest 객체의 값 수정
+        joinRequest['loginId'] = id;
+        joinRequest['password'] = password;
+        joinRequest['passwordCheck'] = passwordCheck;
+        joinRequest['name'] = name;
+
+        // 수정된 JoinRequest 객체를 POST 요청으로 보냄
+        Response response = await dio.post(
+          'http://humanbook.kr/api/join',
+          data: joinRequest,
+        );
+
+        if (response.statusCode == 200) {
+          // 회원가입 성공 처리
+          print('회원가입 성공');
+        } else {
+          // 회원가입 실패 처리
+          print('회원가입 실패');
+        }
       } else {
-        // 회원가입 실패 처리
-        print('회원가입 실패');
+        print('JoinRequest 객체를 가져오는 데 실패했습니다.');
       }
     } catch (e) {
       // 네트워크 오류 등 예외 처리
