@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_java_humanbook/board.dart';
 import 'package:flutter_java_humanbook/bookshelf.dart';
+import 'package:flutter_java_humanbook/join.dart';
 import 'package:flutter_java_humanbook/login.dart';
 import 'package:flutter_java_humanbook/login_new.dart';
 import 'package:flutter_java_humanbook/write/first_question.dart';
@@ -65,6 +66,8 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (_) => BookshelfScreen());
           case '/board':
             return MaterialPageRoute(builder: (_) => BoardScreen());
+          case '/join':
+            return MaterialPageRoute(builder: (_) => JoinScreen());
           case '/write':
             return MaterialPageRoute(builder: (_) => WriteScreen());
           case '/write/question1':

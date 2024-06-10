@@ -15,7 +15,6 @@ class _GetBookScreenState extends State<GetBookScreen> {
   String _statusMessage = "";
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
-  List<int>? _coverImageBytes; // 표지 이미지 생략
 
   Future<void> _fetchManuscriptsAndSaveBook() async {
     setState(() {

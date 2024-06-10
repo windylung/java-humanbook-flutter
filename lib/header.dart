@@ -78,6 +78,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
+
               Center(
                 child: TextButton(
                   onPressed: () {
@@ -85,6 +86,22 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                   },
                   child: Text(
                     'BOOK',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
+                    textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                  ),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/join'); // '/write'로 이동하도록 수정
+                  },
+                  child: Text(
+                    'JOIN',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
