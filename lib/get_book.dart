@@ -4,7 +4,6 @@ import 'package:epubx/epubx.dart';
 import 'package:provider/provider.dart';
 import 'auth_provider.dart';
 import 'book.dart';
-// import 'package:image/image.dart' as img; // 표지 이미지 관련 라이브러리 생략
 
 class GetBookScreen extends StatefulWidget {
   @override
@@ -34,7 +33,6 @@ class _GetBookScreenState extends State<GetBookScreen> {
 
         final title = _titleController.text;
         final author = _authorController.text;
-        // final cover = _coverImageBytes; // 표지 이미지 생략
 
         final book = await _createEpub(manuscripts, title, author);
 
@@ -65,18 +63,6 @@ class _GetBookScreenState extends State<GetBookScreen> {
     book.Title = title;
     book.AuthorList = [author];
 
-    // 표지 추가 생략
-    // if (cover != null && cover.isNotEmpty) {
-    //   var coverImage = EpubByteContentFile();
-    //   coverImage.Content = cover;
-    //   coverImage.FileName = 'OEBPS/Images/cover.jpg';
-
-    //   // book.Content가 null인 경우 초기화
-    //   book.Content ??= EpubContent();
-    //   book.Content.Images ??= {};
-    //   book.Content.Images![coverImage.FileName!] = coverImage;
-    // }
-
     // 콘텐츠 추가
     for (var manuscript in manuscripts) {
       var chapter = EpubTextContentFile();
@@ -91,8 +77,6 @@ class _GetBookScreenState extends State<GetBookScreen> {
 
     // EPUB 파일 생성
     var epubBytes = await EpubWriter.writeBook(book);
-    print(epubBytes);
-
     return Book(title: title, author: author, epubContent: epubBytes);
   }
 
@@ -103,13 +87,11 @@ class _GetBookScreenState extends State<GetBookScreen> {
       'title': book.title,
       'author': book.author,
       'isLiked': book.isLiked,
-      // 'cover': book.cover != null ? MultipartFile.fromBytes(book.cover!, filename: 'cover.jpg') : null, // 표지 이미지 생략
       'epub': book.epubContent != null ? MultipartFile.fromBytes(book.epubContent!, filename: '${book.title}.epub') : null,
     });
-    print(formData);
 
     try {
-      final response = await dio.post('http://humanbook.kr/api/manuscripts/books', data: formData);
+      final response = await dio.post('http://humanbook.kr/api/books', data: formData);
       if (response.statusCode == 200) {
         print('Book saved successfully');
       } else {
@@ -119,19 +101,6 @@ class _GetBookScreenState extends State<GetBookScreen> {
       print('Error: $e');
     }
   }
-
-  // 표지 이미지 선택 기능 생략
-  // Future<void> _selectCoverImage() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.image,
-  //   );
-
-  //   if (result != null && result.files.single.bytes != null) {
-  //     setState(() {
-  //       _coverImageBytes = result.files.single.bytes;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -162,16 +131,6 @@ class _GetBookScreenState extends State<GetBookScreen> {
                 ),
               ),
               SizedBox(height: 10),
-              // 표지 이미지 선택 버튼 생략
-              // ElevatedButton(
-              //   onPressed: _selectCoverImage,
-              //   child: Text('Select Cover Image'),
-              // ),
-              // if (_coverImageBytes != null)
-              //   Image.memory(
-              //     _coverImageBytes!,
-              //     height: 200,
-              //   ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _fetchManuscriptsAndSaveBook,
