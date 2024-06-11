@@ -62,8 +62,9 @@ class _CustomHeaderState extends State<CustomHeader> {
                 ),
               ),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.centerRight,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Center(
                       child: TextButton(
@@ -97,14 +98,6 @@ class _CustomHeaderState extends State<CustomHeader> {
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
                     if (isLoggedIn)
                       Row(
                         children: [
