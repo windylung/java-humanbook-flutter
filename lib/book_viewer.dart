@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:vocsy_epub_viewer/epub_viewer.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_java_humanbook/auth_provider.dart';
 
 class BookViewer extends StatefulWidget {
   final int bookId;
@@ -33,13 +35,14 @@ class _BookViewerState extends State<BookViewer> {
         loading = true;
       });
 
-      final response = await http.get(Uri.parse('http://humanbook.kr/api/book/$bookId/content'));
+      final dio = Provider.of<AuthProvider>(context, listen: false).dio;
+      final response = await dio.get('http://humanbook.kr/api/book/$bookId/content');
       if (response.statusCode == 200) {
         // 로컬 디렉토리에 파일 저장
         final directory = await getTemporaryDirectory(); // Use temporary directory
         final filePath = '${directory.path}/book_$bookId.epub';
         final file = File(filePath);
-        await file.writeAsBytes(response.bodyBytes);
+        await file.writeAsBytes(response.data);
 
         // 마지막 위치 로드
         await _loadLastLocation(bookId);
