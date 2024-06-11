@@ -1,8 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 
 class BookViewer extends StatefulWidget {
   final int bookId;
@@ -15,22 +15,31 @@ class BookViewer extends StatefulWidget {
 
 class _BookViewerState extends State<BookViewer> {
   late WebViewController _controller;
-  Future<String>? _filePath;
+  Future<String>? _htmlContent;
 
   @override
   void initState() {
     super.initState();
-    _filePath = _fetchBookContent(widget.bookId);
+    _htmlContent = _fetchBookContent(widget.bookId);
   }
 
   Future<String> _fetchBookContent(int bookId) async {
     final response = await http.get(Uri.parse('http://humanbook.kr/api/book/$bookId/content'));
     if (response.statusCode == 200) {
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/book_$bookId.epub';
-      final file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
-      return filePath;
+      // EPUB 파일을 HTML 콘텐츠로 변환하는 작업이 필요
+      // 여기서는 간단히 HTML로 래핑하여 표시
+      final htmlContent = '''
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Book Viewer</title>
+        </head>
+        <body>
+          <embed src="data:application/epub+zip;base64,${base64Encode(response.bodyBytes)}" type="application/epub+zip" width="100%" height="100%">
+        </body>
+        </html>
+      ''';
+      return htmlContent;
     } else {
       throw Exception('Failed to load book content');
     }
@@ -43,7 +52,7 @@ class _BookViewerState extends State<BookViewer> {
         title: Text('Book Viewer'),
       ),
       body: FutureBuilder<String>(
-        future: _filePath,
+        future: _htmlContent,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -53,7 +62,7 @@ class _BookViewerState extends State<BookViewer> {
             return WebViewWidget(
               controller: WebViewController()
                 ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..loadFile(snapshot.data!),
+                ..loadHtmlString(snapshot.data!),
             );
           } else {
             return Center(child: Text('Unknown error occurred'));
