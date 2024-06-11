@@ -23,6 +23,7 @@ class _BookViewerState extends State<BookViewer> {
   @override
   void initState() {
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is properly initialized
     _fetchAndOpenBookContent(widget.bookId);
   }
 
@@ -35,7 +36,7 @@ class _BookViewerState extends State<BookViewer> {
       final response = await http.get(Uri.parse('http://humanbook.kr/api/book/$bookId/content'));
       if (response.statusCode == 200) {
         // 로컬 디렉토리에 파일 저장
-        final directory = await getApplicationDocumentsDirectory();
+        final directory = await getTemporaryDirectory(); // Use temporary directory
         final filePath = '${directory.path}/book_$bookId.epub';
         final file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
@@ -61,7 +62,7 @@ class _BookViewerState extends State<BookViewer> {
   }
 
   Future<void> _loadLastLocation(int bookId) async {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = await getTemporaryDirectory(); // Use temporary directory
     final filePath = '${directory.path}/last_location_$bookId.json';
     final file = File(filePath);
 
@@ -72,7 +73,7 @@ class _BookViewerState extends State<BookViewer> {
   }
 
   Future<void> _saveLastLocation(int bookId, Map<String, dynamic> locator) async {
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = await getTemporaryDirectory(); // Use temporary directory
     final filePath = '${directory.path}/last_location_$bookId.json';
     final file = File(filePath);
 
