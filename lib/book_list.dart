@@ -35,7 +35,7 @@ class _BookListState extends State<BookList> {
   Future<List<Book>> fetchBooks(String uri) async {
     final response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
-      List<dynamic> booksJson = jsonDecode(response.body);
+      List<dynamic> booksJson = jsonDecode(utf8.decode(response.bodyBytes));
       return booksJson.map((json) => Book.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load books');
