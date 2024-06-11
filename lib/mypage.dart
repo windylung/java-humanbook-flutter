@@ -25,7 +25,7 @@ class _MyPageState extends State<MyPage> {
   // 사용자 정보를 서버에서 가져오는 메서드
   void fetchUserProfile() async {
     // 서버 URL
-    var url = Uri.parse('http://서버주소/api/user/profile');
+    var url = Uri.parse('http://humanbook.kr/api/user/profile');
 
     // 서버로 HTTP GET 요청 보내기
     var response = await http.get(url);
@@ -156,4 +156,3 @@ class _MyPageState extends State<MyPage> {
     );
   }
 }
-
