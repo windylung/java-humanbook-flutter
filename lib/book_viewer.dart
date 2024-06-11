@@ -18,6 +18,7 @@ class BookViewer extends StatefulWidget {
 class _BookViewerState extends State<BookViewer> {
   bool loading = false;
   String filePath = "";
+  Map<String, dynamic>? lastLocation;
 
   @override
   void initState() {
@@ -39,6 +40,9 @@ class _BookViewerState extends State<BookViewer> {
         final file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
 
+        // 마지막 위치 로드
+        await _loadLastLocation(bookId);
+
         // EPUB 뷰어 열기
         await _openEpub(filePath);
       } else {
@@ -56,6 +60,26 @@ class _BookViewerState extends State<BookViewer> {
     }
   }
 
+  Future<void> _loadLastLocation(int bookId) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/last_location_$bookId.json';
+    final file = File(filePath);
+
+    if (await file.exists()) {
+      final content = await file.readAsString();
+      lastLocation = jsonDecode(content);
+    }
+  }
+
+  Future<void> _saveLastLocation(int bookId, Map<String, dynamic> locator) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/last_location_$bookId.json';
+    final file = File(filePath);
+
+    final content = jsonEncode(locator);
+    await file.writeAsString(content);
+  }
+
   Future<void> _openEpub(String filePath) async {
     VocsyEpub.setConfig(
       themeColor: Theme.of(context).primaryColor,
@@ -67,18 +91,14 @@ class _BookViewerState extends State<BookViewer> {
     );
 
     // 현재 위치 저장을 위한 스트림
-    VocsyEpub.locatorStream.listen((locator) {
+    VocsyEpub.locatorStream.listen((locator) async {
       print('LOCATOR: $locator');
+      await _saveLastLocation(widget.bookId, locator);
     });
 
     VocsyEpub.open(
       filePath,
-      lastLocation: EpubLocator.fromJson({
-        "bookId": "2239",
-        "href": "/OEBPS/ch06.xhtml",
-        "created": 1539934158390,
-        "locations": {"cfi": "epubcfi(/0!/4/4[simple_book]/2/2/6)"}
-      }),
+      lastLocation: lastLocation != null ? EpubLocator.fromJson(lastLocation!) : null,
     );
   }
 
