@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:vocsy_epub_viewer/epub_viewer.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_java_humanbook/auth_provider.dart';
+import 'package:vocsy_epub_viewer/epub_viewer.dart';
+
+import 'auth_provider.dart'; // AuthProvider를 사용하는 경우, 이 파일을 import 해야 합니다.
 
 class BookViewer extends StatefulWidget {
   final int bookId;
@@ -36,7 +37,11 @@ class _BookViewerState extends State<BookViewer> {
       });
 
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://humanbook.kr/api/book/$bookId/content');
+      final response = await dio.get(
+        'http://humanbook.kr/api/book/$bookId/content',
+        options: Options(responseType: ResponseType.bytes), // 바이너리 데이터로 처리
+      );
+
       if (response.statusCode == 200) {
         // 로컬 디렉토리에 파일 저장
         final directory = await getTemporaryDirectory(); // Use temporary directory
