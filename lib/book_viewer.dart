@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 class BookViewer extends StatefulWidget {
@@ -23,11 +23,11 @@ class _BookViewerState extends State<BookViewer> {
     _filePath = _fetchBookContent(widget.bookId);
   }
 
-  Future<String> _fetchBookContent(int id) async {
-    final response = await http.get(Uri.parse('http://localhost:8080/api/book/$id/content'));
+  Future<String> _fetchBookContent(int bookId) async {
+    final response = await http.get(Uri.parse('http://humanbook.kr/api/book/$bookId/content'));
     if (response.statusCode == 200) {
       final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/book_$id.epub';
+      final filePath = '${directory.path}/book_$bookId.epub';
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
       return filePath;
