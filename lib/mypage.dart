@@ -2,52 +2,18 @@ import 'package:flutter/material.dart';
 import 'book_list.dart';
 import 'book.dart';
 import 'book_detail.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-class MyPage extends StatefulWidget {
-  @override
-  _MyPageState createState() => _MyPageState();
-}
+class MyPage extends StatelessWidget {
+  final List<Book> likedBooks;
 
-class _MyPageState extends State<MyPage> {
-  List<Book> likedBooks = []; // 좋아하는 책 목록
-
-  String userId = ''; // 사용자 아이디
-  String userName = ''; // 사용자 이름
-
-  @override
-  void initState() {
-    super.initState();
-    fetchUserProfile(); // 사용자 정보 가져오기
-  }
-
-  // 사용자 정보를 서버에서 가져오는 메서드
-  void fetchUserProfile() async {
-    // 서버 URL
-    var url = Uri.parse('http://humanbook.kr/api/user/profile');
-
-    // 서버로 HTTP GET 요청 보내기
-    var response = await http.get(url);
-
-    // 응답 데이터 확인
-    if (response.statusCode == 200) {
-      // JSON 데이터 파싱
-      Map<String, dynamic> userData = jsonDecode(response.body);
-
-      // 사용자 아이디와 이름 설정
-      setState(() {
-        userId = userData['userId'];
-        userName = userData['userName'];
-      });
-    } else {
-      // 오류 처리
-      print('Failed to load user profile');
-    }
-  }
+  MyPage({required this.likedBooks});
 
   @override
   Widget build(BuildContext context) {
+    
+    String userId = 'User123';
+    String userName = 'Name123';
+
     return Scaffold(
       appBar: AppBar(
         title: Text('My Page'),
