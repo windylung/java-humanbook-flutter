@@ -35,7 +35,7 @@ class _ThirdQuestionScreenState extends State<ThirdQuestionScreen> {
         headers: {'Cookie': cookies},
       );
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
         setState(() {
           _titleController.text = data['title'] ?? '';
           _contentController.text = data['content'] ?? '';
