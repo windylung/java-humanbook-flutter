@@ -18,8 +18,8 @@ class _CustomHeaderState extends State<CustomHeader> {
   Future<void> _handleLogout() async {
     try {
       Dio dio = Dio();
-      Response response = await dio.get(
-        'http://humanbook.kr/api/logout',
+      Response response = await dio.post( // 로그아웃 요청을 POST로 변경
+        'http://humanbook.kr/logout', // 새로운 로그아웃 엔드포인트로 변경
       );
 
       if (response.statusCode == 200) {
