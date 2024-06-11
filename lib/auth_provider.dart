@@ -12,7 +12,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   bool get isLoggedIn => _isLoggedIn;
-  String get userId => _userId; // 사용자 아이디를 반환하는 getter 추가
+  String get userId => _userId;
 
   Future<void> login(String loginId, String password) async {
     try {

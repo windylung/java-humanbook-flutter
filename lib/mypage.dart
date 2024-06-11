@@ -13,7 +13,7 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    String userId = authProvider.userId; // AuthProvider에서 사용자 아이디를 가져옴
+    String userId = authProvider.userId;
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +28,7 @@ class MyPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '현재 접속한 아이디: $userId', // 로그인한 사용자 아이디 출력
+                    '현재 접속한 아이디: $userId',
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 8.0),
