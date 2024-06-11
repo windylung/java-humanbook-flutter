@@ -6,34 +6,43 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class MyPage extends StatefulWidget {
-  final List<Book> likedBooks;
-
-  MyPage({required this.likedBooks});
-
   @override
   _MyPageState createState() => _MyPageState();
 }
 
 class _MyPageState extends State<MyPage> {
-  String userId = '';
-  String userName = '';
+  List<Book> likedBooks = []; // 좋아하는 책 목록
+
+  String userId = ''; // 사용자 아이디
+  String userName = ''; // 사용자 이름
 
   @override
   void initState() {
     super.initState();
-    getUserProfile();
+    fetchUserProfile(); // 사용자 정보 가져오기
   }
 
-  Future<void> getUserProfile() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/api/user/profile'));
+  // 사용자 정보를 서버에서 가져오는 메서드
+  void fetchUserProfile() async {
+    // 서버 URL
+    var url = Uri.parse('http://서버주소/api/user/profile');
+
+    // 서버로 HTTP GET 요청 보내기
+    var response = await http.get(url);
+
+    // 응답 데이터 확인
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
+      // JSON 데이터 파싱
+      Map<String, dynamic> userData = jsonDecode(response.body);
+
+      // 사용자 아이디와 이름 설정
       setState(() {
-        userId = data['userId'];
-        userName = data['userName'];
+        userId = userData['userId'];
+        userName = userData['userName'];
       });
     } else {
-      throw Exception('Failed to load user profile');
+      // 오류 처리
+      print('Failed to load user profile');
     }
   }
 
@@ -69,7 +78,7 @@ class _MyPageState extends State<MyPage> {
               ),
             ),
           ),
-          widget.likedBooks.isEmpty
+          likedBooks.isEmpty
               ? SliverToBoxAdapter(
                   child: Center(child: Text("좋아요 누른 책이 없어요.")),
                 )
@@ -84,7 +93,7 @@ class _MyPageState extends State<MyPage> {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        Book book = widget.likedBooks[index];
+                        Book book = likedBooks[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -138,7 +147,7 @@ class _MyPageState extends State<MyPage> {
                           ),
                         );
                       },
-                      childCount: widget.likedBooks.length,
+                      childCount: likedBooks.length,
                     ),
                   ),
                 ),
@@ -147,3 +156,4 @@ class _MyPageState extends State<MyPage> {
     );
   }
 }
+
