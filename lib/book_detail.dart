@@ -10,35 +10,6 @@ class BookDetailPage extends StatelessWidget {
 
   BookDetailPage({required this.book});
 
-  Future<String> _fetchBookContent(BuildContext context) async {
-    final response = await http.get(Uri.parse('http://humanbook.kr/api/book/${book.id}/content'));
-    if (response.statusCode == 200) {
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/book_${book.id}.epub';
-      final file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
-      return filePath;
-    } else {
-      throw Exception('Failed to load book content');
-    }
-  }
-
-  void _readBook(BuildContext context) async {
-    try {
-      final filePath = await _fetchBookContent(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BookViewer(bookId: book.id,),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load book content')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +83,14 @@ class BookDetailPage extends StatelessWidget {
               SizedBox(height: 16.0),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => _readBook(context),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookViewer(bookId: book.id,),
+                      ),
+                    );
+                  },
                   child: Text('사람책 읽기'),
                 ),
               ),

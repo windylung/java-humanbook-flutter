@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (_) => SecondQuestionScreen());
           case '/write/question3':
             return MaterialPageRoute(builder: (_) => ThirdQuestionScreen());
-          // case '/write/book':
+          // case '/book/{filPath}':
           //   return MaterialPageRoute(builder: (_) => BookViewer(filePath: filePath));
           case '/mypage':
             return MaterialPageRoute(builder: (_) => MyPage(likedBooks: likedBooks));
