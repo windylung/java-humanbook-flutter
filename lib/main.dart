@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_java_humanbook/board.dart';
+import 'package:flutter_java_humanbook/book_viewer.dart';
 import 'package:flutter_java_humanbook/bookshelf.dart';
 import 'package:flutter_java_humanbook/join.dart';
 import 'package:flutter_java_humanbook/login.dart';
@@ -76,8 +77,8 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (_) => SecondQuestionScreen());
           case '/write/question3':
             return MaterialPageRoute(builder: (_) => ThirdQuestionScreen());
-          case '/write/book':
-            return MaterialPageRoute(builder: (_) => GetBookScreen());
+          // case '/write/book':
+          //   return MaterialPageRoute(builder: (_) => BookViewer(filePath: filePath));
           case '/mypage':
             return MaterialPageRoute(builder: (_) => MyPage(likedBooks: likedBooks));
           default:
@@ -117,7 +118,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-          BookList(uri: 'http://humanbook.kr/api/book/list', onLike: onLike),
+          BookList(onLike: onLike),
         ],
       ),
     );

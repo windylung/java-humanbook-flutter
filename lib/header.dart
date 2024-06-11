@@ -18,21 +18,18 @@ class _CustomHeaderState extends State<CustomHeader> {
   Future<void> _handleLogout() async {
     try {
       Dio dio = Dio();
-      Response response = await dio.post( // 로그아웃 요청을 POST로 변경
-        'http://humanbook.kr/api/logout', // 새로운 로그아웃 엔드포인트로 변경
+      Response response = await dio.post(
+        'http://humanbook.kr/api/logout',
       );
 
       if (response.statusCode == 200) {
-        // logout 성공 처리
         print('logout 성공');
-        Provider.of<AuthProvider>(context, listen: false).logout(); // 로컬 로그아웃 처리
-        Navigator.pushNamed(context, '/'); // 로그아웃 후 '/'로 이동
+        Provider.of<AuthProvider>(context, listen: false).logout();
+        Navigator.pushNamed(context, '/');
       } else {
-        // logout 실패 처리
         print('logout 실패');
       }
     } catch (e) {
-      // 네트워크 오류 등 예외 처리
       print('오류: $e');
     }
   }
@@ -53,10 +50,10 @@ class _CustomHeaderState extends State<CustomHeader> {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/'); // 로고 클릭 시 '/'로 이동
+                    Navigator.pushNamed(context, '/');
                   },
                   child: Image.asset(
-                    'assets/logo.png', // 이미지 경로 설정
+                    'assets/logo.png',
                     height: 50,
                   ),
                 ),
@@ -69,7 +66,7 @@ class _CustomHeaderState extends State<CustomHeader> {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/board'); // '/board'로 이동하도록 수정
+                          Navigator.pushNamed(context, '/board');
                         },
                         child: Text(
                           'BOARD',
@@ -77,15 +74,15 @@ class _CustomHeaderState extends State<CustomHeader> {
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                          textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                          overflow: TextOverflow.visible,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/bookshelf'); // '/bookshelf'로 이동하도록 수정
+                          Navigator.pushNamed(context, '/bookshelf');
                         },
                         child: Text(
                           'BOOK',
@@ -93,8 +90,8 @@ class _CustomHeaderState extends State<CustomHeader> {
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                          textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                          overflow: TextOverflow.visible,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
@@ -104,7 +101,7 @@ class _CustomHeaderState extends State<CustomHeader> {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/mypage'); // '/mypage'로 이동하도록 수정
+                                Navigator.pushNamed(context, '/mypage');
                               },
                               child: Text(
                                 'MY PAGE',
@@ -112,8 +109,8 @@ class _CustomHeaderState extends State<CustomHeader> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
@@ -128,8 +125,24 @@ class _CustomHeaderState extends State<CustomHeader> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/write');
+                              },
+                              child: Text(
+                                'WRITE',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
@@ -141,7 +154,7 @@ class _CustomHeaderState extends State<CustomHeader> {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/login_new'); // '/login'으로 이동하도록 수정
+                                Navigator.pushNamed(context, '/login_new');
                               },
                               child: Text(
                                 'LOGIN',
@@ -149,15 +162,15 @@ class _CustomHeaderState extends State<CustomHeader> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/join'); // '/join'으로 이동하도록 수정
+                                Navigator.pushNamed(context, '/join');
                               },
                               child: Text(
                                 'JOIN',
@@ -165,24 +178,8 @@ class _CustomHeaderState extends State<CustomHeader> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/write'); // '/write'로 이동하도록 수정
-                              },
-                              child: Text(
-                                'WRITE',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.visible, // 텍스트가 사라짐 없이 보이도록 설정
-                                textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),

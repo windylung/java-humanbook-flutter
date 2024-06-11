@@ -6,10 +6,10 @@ import 'package:http/http.dart' as http;
 import 'book_detail.dart';
 
 class BookList extends StatefulWidget {
-  final String uri;
+  final String uri =  'http://humanbook.kr/api/book/list';
   final Function(Book)? onLike; // 추가: 좋아요 상태가 변경될 때 호출되는 콜백
 
-  BookList({required this.uri, this.onLike});
+  BookList({this.onLike});
 
   @override
   _BookListState createState() => _BookListState();

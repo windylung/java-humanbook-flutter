@@ -74,7 +74,7 @@ class BookshelfScreenState extends State<BookshelfScreen> {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                BookList(uri: _uri), // 책 목록을 보여주는 BookList 위젯
+                BookList(), // 책 목록을 보여주는 BookList 위젯
               ],
             ),
           ),
