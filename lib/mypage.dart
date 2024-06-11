@@ -2,18 +2,43 @@ import 'package:flutter/material.dart';
 import 'book_list.dart';
 import 'book.dart';
 import 'book_detail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   final List<Book> likedBooks;
 
   MyPage({required this.likedBooks});
 
   @override
-  Widget build(BuildContext context) {
-    
-    String userId = 'User123';
-    String userName = 'Name123';
+  _MyPageState createState() => _MyPageState();
+}
 
+class _MyPageState extends State<MyPage> {
+  String userId = '';
+  String userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getUserProfile();
+  }
+
+  Future<void> getUserProfile() async {
+    final response = await http.get(Uri.parse('http://localhost:8080/api/user/profile'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      setState(() {
+        userId = data['userId'];
+        userName = data['userName'];
+      });
+    } else {
+      throw Exception('Failed to load user profile');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Page'),
@@ -44,7 +69,7 @@ class MyPage extends StatelessWidget {
               ),
             ),
           ),
-          likedBooks.isEmpty
+          widget.likedBooks.isEmpty
               ? SliverToBoxAdapter(
                   child: Center(child: Text("좋아요 누른 책이 없어요.")),
                 )
@@ -59,7 +84,7 @@ class MyPage extends StatelessWidget {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        Book book = likedBooks[index];
+                        Book book = widget.likedBooks[index];
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -113,7 +138,7 @@ class MyPage extends StatelessWidget {
                           ),
                         );
                       },
-                      childCount: likedBooks.length,
+                      childCount: widget.likedBooks.length,
                     ),
                   ),
                 ),
