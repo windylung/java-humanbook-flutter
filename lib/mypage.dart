@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'book_list.dart';
 import 'book.dart';
 import 'book_detail.dart';
+import 'auth_provider.dart';
 
 class MyPage extends StatelessWidget {
   final List<Book> likedBooks;
@@ -10,9 +12,8 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    String userId = 'User123';
-    String userName = 'Name123';
+    final authProvider = Provider.of<AuthProvider>(context);
+    String userId = authProvider.userId; // AuthProvider에서 사용자 아이디를 가져옴
 
     return Scaffold(
       appBar: AppBar(
@@ -27,15 +28,10 @@ class MyPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'ID: $userId',
+                    '현재 접속한 아이디: $userId', // 로그인한 사용자 아이디 출력
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(height: 8.0),
-                  Text(
-                    'Name: $userName',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  SizedBox(height: 16.0),
                   Text(
                     '좋아요 누른 책들',
                     style: TextStyle(fontSize: 20),
