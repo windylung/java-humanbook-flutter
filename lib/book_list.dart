@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'book.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class BookList extends StatefulWidget {
   final String uri;
@@ -31,14 +29,18 @@ class _BookListState extends State<BookList> {
   }
 
   Future<void> _fetchBooks() async {
-    final response = await http.get(Uri.parse(widget.uri));
-    if (response.statusCode == 200) {
-      final List<dynamic> bookJson = json.decode(response.body);
-      setState(() {
-        _books = bookJson.map((json) => Book.fromJson(json)).toList();
-      });
-    } else {
-      throw Exception('Failed to load books');
+    try {
+      final dio = Dio(); // AuthProvider를 사용하는 경우 AuthProvider에서 dio 인스턴스를 가져오세요.
+      final response = await dio.get(widget.uri);
+      if (response.statusCode == 200) {
+        setState(() {
+          _books = List<Book>.from(response.data.map((book) => Book.fromJson(book)));
+        });
+      } else {
+        throw Exception('Failed to load books');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -48,8 +50,8 @@ class _BookListState extends State<BookList> {
       delegate: SliverChildBuilderDelegate(
             (context, index) {
           return ListTile(
-            title: Text(_books[index].title!),
-            subtitle: Text(_books[index].author!),
+            title: Text(_books[index].title ?? 'No Title'),
+            subtitle: Text(_books[index].author ?? 'No Author'),
           );
         },
         childCount: _books.length,
