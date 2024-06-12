@@ -49,24 +49,22 @@ class _LoginScreenState extends State<LoginScreenNew> {
       ),
     );
   }
-  
+
   Future<void> _login() async {
-  try {
-    await Provider.of<AuthProvider>(context, listen: false).login(
-      _loginIdController.text,
-      _passwordController.text,
-    );
-    Navigator.pushReplacementNamed(context, '/');
-  } catch (e) {
-    String errorMessage = '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.';
-    if (e.toString() == 'nonexistent_user') {
-      errorMessage = '존재하지 않는 아이디입니다.';
-    } else if (e.toString() == 'wrong_password') {
-      errorMessage = '잘못된 비밀번호입니다.';
+    try {
+      await Provider.of<AuthProvider>(context, listen: false).login(
+        _loginIdController.text,
+        _passwordController.text,
+      );
+      Navigator.pushReplacementNamed(context, '/');
+    } catch (e) {
+      _showDialog('오류', '로그인에 실패했습니다.');
+      setState(() {
+        _responseMessage = 'Error: $e';
+      });
     }
-    _showDialog('알림', errorMessage);
   }
-}
+
 
 
   @override
