@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'common_dialog.dart'; // CommonDialog 클래스를 import
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -33,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       if (response.statusCode == 200) {
-        // Assuming JSON response is expected
         try {
           Map<String, dynamic> memberJson = jsonDecode(response.body);
           setState(() {
@@ -50,12 +50,26 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _responseMessage = 'Login failed: ${response.body}';
         });
+        _showErrorDialog('Login Failed', _responseMessage);
       }
     } catch (e) {
       setState(() {
         _responseMessage = 'Error: $e';
       });
+      _showErrorDialog('Error', _responseMessage);
     }
+  }
+
+  void _showErrorDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) => CommonDialog(
+        title: title,
+        content: content,
+        buttonText: 'OK',
+        isSuccess: false,
+      ),
+    );
   }
 
   void _handleLogin() async {
