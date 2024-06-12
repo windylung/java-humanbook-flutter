@@ -48,9 +48,11 @@ class BookshelfScreenState extends State<BookshelfScreen> {
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
-                    setState(() {
-                      _searchOption = newValue!;
-                    });
+                    if (newValue != null) {
+                      setState(() {
+                        _searchOption = newValue;
+                      });
+                    }
                   },
                 ),
                 SizedBox(width: 16.0),
@@ -74,7 +76,7 @@ class BookshelfScreenState extends State<BookshelfScreen> {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                BookList(), // 책 목록을 보여주는 BookList 위젯
+                BookList(uri: _uri), // 변경된 URI를 전달
               ],
             ),
           ),

@@ -121,7 +121,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-          BookList(onLike: onLike),
+          BookList(uri: 'http://humanbook.kr/api/book/list',),
         ],
       ),
     );
