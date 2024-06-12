@@ -137,14 +137,14 @@ class _HoverImageState extends State<HoverImage> with SingleTickerProviderStateM
       child: GestureDetector(
         onTap: () {
           if (widget.isVisible) {
-            if (widget.route == '/write/final' && widget.currentSteps < 3) {
+            if (widget.route == '/book/create' && widget.currentSteps < 3) {
               _showStepDialog();
-            } else if (widget.route == '/write/final') {
+            } else if (widget.route == '/book/create') {
               _startAnimation();
             } else {
               Navigator.pushNamed(context, widget.route);
             }
-          } else if (widget.route != '/write/final'){
+          } else if (widget.route != '/book/create'){
             Navigator.pushNamed(context, widget.route);
           } else {
             _showStepDialog();
