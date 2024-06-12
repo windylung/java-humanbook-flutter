@@ -24,17 +24,16 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
       );
 
       if (response.statusCode == 200) {
-        _showDialog('성공', '저장되었습니다.');
-        Navigator.pop(context);
+        _showDialog('성공', '저장되었습니다.', true);
       } else {
-        _showDialog('실패', '저장되지 않았습니다.');
+        _showDialog('실패', '저장되지 않았습니다.', false);
       }
     } catch (e) {
-      _showDialog('실패', '저장되지 않았습니다.');
+      _showDialog('실패', '저장되지 않았습니다.', false);
     }
   }
 
-  void _showDialog(String title, String content) {
+  void _showDialog(String title, String content, bool shouldPop) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -46,6 +45,9 @@ class _BoardWriteScreenState extends State<BoardWriteScreen> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
+                if (shouldPop) {
+                  Navigator.of(context).pop();  // Pop twice if saving is successful
+                }
               },
             ),
           ],
