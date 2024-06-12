@@ -19,7 +19,7 @@ class _BookCreatePageState extends State<BookCreatePage> {
       });
 
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
-      final response = await dio.get('http://humanbook.kr/api/book/save');
+      final response = await dio.post('http://humanbook.kr/api/book/save');
 
       if (response.statusCode == 200) {
         showCommonDialog(
