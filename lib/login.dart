@@ -50,13 +50,15 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _responseMessage = 'Login failed: ${response.body}';
         });
-        _showErrorDialog('Login Failed', _responseMessage);
+        showCommonDialog(context, "Login Failed", _responseMessage, "OK", false);
+        // _showErrorDialog('Login Failed', _responseMessage);
       }
     } catch (e) {
       setState(() {
         _responseMessage = 'Error: $e';
       });
-      _showErrorDialog('Error', _responseMessage);
+      showCommonDialog(context, "Login Failed", _responseMessage, "OK", false);
+      // _showErrorDialog('Error', _responseMessage);
     }
   }
 
