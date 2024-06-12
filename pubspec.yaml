@@ -37,16 +37,19 @@ dependencies:
   dio_cookie_manager: ^2.0.0
   provider: ^6.0.0
   file_picker: ^4.2.5
-  path_provider: ^2.0.11
+#  path_provider: ^2.0.11
   epubx: any
   shared_preferences: ^2.0.7
   webview_flutter: ^4.8.0
-  vocsy_epub_viewer: ^2.0.0
+
+#  vocsy_epub_viewer: ^2.0.0
+  epub_view: ^3.2.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
+  internet_file: ^1.2.0
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:vocsy_epub_viewer/epub_viewer.dart';
+import 'package:epub_view/epub_view.dart';
 
 import 'auth_provider.dart'; // AuthProvider를 사용하는 경우, 이 파일을 import 해야 합니다.
 
@@ -20,17 +17,16 @@ class BookViewer extends StatefulWidget {
 
 class _BookViewerState extends State<BookViewer> {
   bool loading = false;
-  String filePath = "";
-  Map<String, dynamic>? lastLocation;
+  Uint8List? epubBytes;
+  EpubController? _epubController;
 
   @override
   void initState() {
     super.initState();
-    WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is properly initialized
-    _fetchAndOpenBookContent(widget.bookId);
+    _fetchBookContent(widget.bookId);
   }
 
-  Future<void> _fetchAndOpenBookContent(int bookId) async {
+  Future<void> _fetchBookContent(int bookId) async {
     try {
       setState(() {
         loading = true;
@@ -39,21 +35,14 @@ class _BookViewerState extends State<BookViewer> {
       final dio = Provider.of<AuthProvider>(context, listen: false).dio;
       final response = await dio.get(
         'http://humanbook.kr/api/book/$bookId/content',
-        options: Options(responseType: ResponseType.bytes), // 바이너리 데이터로 처리
+        options: Options(responseType: ResponseType.bytes),
       );
 
       if (response.statusCode == 200) {
-        // 로컬 디렉토리에 파일 저장
-        final directory = await getTemporaryDirectory();
-        final filePath = '${directory.path}/book_$bookId.epub';
-        final file = File(filePath);
-        await file.writeAsBytes(response.data);
-
-        // 마지막 위치 로드
-        await _loadLastLocation(bookId);
-
-        // EPUB 뷰어 열기
-        await _openEpub(filePath);
+        epubBytes = Uint8List.fromList(response.data);
+        _epubController = EpubController(
+          document: EpubDocument.openData(epubBytes!),
+        );
       } else {
         throw Exception('Failed to load book content');
       }
@@ -69,46 +58,10 @@ class _BookViewerState extends State<BookViewer> {
     }
   }
 
-  Future<void> _loadLastLocation(int bookId) async {
-    final directory = await getTemporaryDirectory();
-    final filePath = '${directory.path}/last_location_$bookId.json';
-    final file = File(filePath);
-
-    if (await file.exists()) {
-      final content = await file.readAsString();
-      lastLocation = jsonDecode(content);
-    }
-  }
-
-  Future<void> _saveLastLocation(int bookId, Map<String, dynamic> locator) async {
-    final directory = await getTemporaryDirectory();
-    final filePath = '${directory.path}/last_location_$bookId.json';
-    final file = File(filePath);
-
-    final content = jsonEncode(locator);
-    await file.writeAsString(content);
-  }
-
-  Future<void> _openEpub(String filePath) async {
-    VocsyEpub.setConfig(
-      themeColor: Theme.of(context).primaryColor,
-      identifier: "book_$filePath",
-      scrollDirection: EpubScrollDirection.ALLDIRECTIONS,
-      allowSharing: true,
-      enableTts: true,
-      nightMode: true,
-    );
-
-    // 현재 위치 저장을 위한 스트림
-    VocsyEpub.locatorStream.listen((locator) async {
-      print('LOCATOR: $locator');
-      await _saveLastLocation(widget.bookId, locator);
-    });
-
-    VocsyEpub.open(
-      filePath,
-      lastLocation: lastLocation != null ? EpubLocator.fromJson(lastLocation!) : null,
-    );
+  @override
+  void dispose() {
+    _epubController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -119,7 +72,11 @@ class _BookViewerState extends State<BookViewer> {
       ),
       body: loading
           ? Center(child: CircularProgressIndicator())
-          : Center(child: Text('EPUB 파일이 로드되었습니다')),
+          : epubBytes == null
+          ? Center(child: Text('Failed to load book content'))
+          : EpubView(
+        controller: _epubController!,
+      ),
     );
   }
 }
