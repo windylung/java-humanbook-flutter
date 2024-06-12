@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_java_humanbook/book_list2.dart';
 import 'book.dart';
 import 'book_list.dart';
 import 'dart:async';
@@ -76,7 +77,7 @@ class BookshelfScreenState extends State<BookshelfScreen> {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                BookList(uri: _uri), // 변경된 URI를 전달
+                BookList2(uri: _uri), // 변경된 URI를 전달
               ],
             ),
           ),
