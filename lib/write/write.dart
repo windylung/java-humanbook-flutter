@@ -70,7 +70,7 @@ class _WriteScreenState extends State<WriteScreen> {
             SizedBox(width: 10),
             HoverImage(
               assetPath: 'assets/final_card.png',
-              route: '/write/book',
+              route: '/book/create',
               isVisible: steps.length >= 3,
               stepRequired: 3,
               currentSteps: steps.length,

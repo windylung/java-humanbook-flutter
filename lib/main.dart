@@ -5,6 +5,7 @@ import 'package:flutter_java_humanbook/bookshelf.dart';
 import 'package:flutter_java_humanbook/join.dart';
 import 'package:flutter_java_humanbook/login.dart';
 import 'package:flutter_java_humanbook/login_new.dart';
+import 'package:flutter_java_humanbook/create_book.dart';
 import 'package:flutter_java_humanbook/write/first_question.dart';
 import 'package:flutter_java_humanbook/get_book.dart';
 import 'package:flutter_java_humanbook/write/second_question.dart';
@@ -77,6 +78,8 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (_) => SecondQuestionScreen());
           case '/write/question3':
             return MaterialPageRoute(builder: (_) => ThirdQuestionScreen());
+          case '/create/book':
+            return MaterialPageRoute(builder: (_) => BookCreatePage());
           // case '/book/{filPath}':
           //   return MaterialPageRoute(builder: (_) => BookViewer(filePath: filePath));
           case '/mypage':
