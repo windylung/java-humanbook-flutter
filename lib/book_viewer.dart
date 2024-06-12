@@ -44,7 +44,7 @@ class _BookViewerState extends State<BookViewer> {
 
       if (response.statusCode == 200) {
         // 로컬 디렉토리에 파일 저장
-        final directory = await getTemporaryDirectory(); // Use temporary directory
+        final directory = await getTemporaryDirectory();
         final filePath = '${directory.path}/book_$bookId.epub';
         final file = File(filePath);
         await file.writeAsBytes(response.data);
@@ -70,7 +70,7 @@ class _BookViewerState extends State<BookViewer> {
   }
 
   Future<void> _loadLastLocation(int bookId) async {
-    final directory = await getTemporaryDirectory(); // Use temporary directory
+    final directory = await getTemporaryDirectory();
     final filePath = '${directory.path}/last_location_$bookId.json';
     final file = File(filePath);
 
@@ -81,7 +81,7 @@ class _BookViewerState extends State<BookViewer> {
   }
 
   Future<void> _saveLastLocation(int bookId, Map<String, dynamic> locator) async {
-    final directory = await getTemporaryDirectory(); // Use temporary directory
+    final directory = await getTemporaryDirectory();
     final filePath = '${directory.path}/last_location_$bookId.json';
     final file = File(filePath);
 
