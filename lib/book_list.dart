@@ -4,10 +4,10 @@ import 'book_detail.dart';
 import 'package:dio/dio.dart';
 
 class BookList extends StatefulWidget {
-  final String uri = 'http://humanbook.kr/api/book/list';
+  final String _uri = 'http://humanbook.kr/api/book/list';
   final Function(Book)? onLike; // 추가: 좋아요 상태가 변경될 때 호출되는 콜백
-
-  BookList({this.onLike});
+  final String? uri;
+  BookList({this.onLike, this.uri});
 
   @override
   _BookListState createState() => _BookListState();
@@ -20,14 +20,14 @@ class _BookListState extends State<BookList> {
   @override
   void initState() {
     super.initState();
-    books = _fetchBooks(widget.uri);
+    books = _fetchBooks(widget._uri);
   }
 
   @override
   void didUpdateWidget(BookList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.uri != widget.uri) {
-      books = _fetchBooks(widget.uri);
+    if (oldWidget.uri != widget._uri) {
+      books = _fetchBooks(widget._uri);
     }
   }
 
