@@ -187,7 +187,7 @@ class _HoverImageState extends State<HoverImage> with SingleTickerProviderStateM
           ),
         ),
         content: Text(
-          '현재 단계: ${widget.currentSteps}/3\n단계가 부족합니다.',
+          '현재 단계는 ${widget.currentSteps}\n3단계까지 작성해주세요',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.black,
