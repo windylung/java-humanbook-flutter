@@ -27,6 +27,8 @@ class _BookCreatePageState extends State<BookCreatePage> {
         setState(() {
           message = 'Book created successfully!';
         });
+        // 성공 시 홈 페이지로 이동
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       } else {
         throw Exception('Failed to create book');
       }
