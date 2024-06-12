@@ -103,7 +103,7 @@ class _BookListState extends State<BookList> {
                             width: 157,
                             height: 213,
                             margin: EdgeInsets.symmetric(horizontal: 30.0),
-                            child: book.id % 2 ? Image.asset('assets/cover.png', fit: BoxFit.cover) : Image.asset('assets/cover2.png', fit: BoxFit.cover),
+                            child: book.id % 2 == 1? Image.asset('assets/cover.png', fit: BoxFit.cover) : Image.asset('assets/cover2.png', fit: BoxFit.cover),
                           ),
                           Expanded(
                             child: Column(
